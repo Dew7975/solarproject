@@ -1,0 +1,39 @@
+{
+  "sorted_middleware": [],
+  "middleware": {
+    "/": {
+      "files": [
+        "server/edge/chunks/404SquadSolarConnect_final_cb495305._.js",
+        "server/edge/chunks/[root-of-the-server]__c134ced4._.js",
+        "server/edge/chunks/turbopack-404SquadSolarConnect_final_edge-wrapper_bd1d21cc.js"
+      ],
+      "name": "middleware",
+      "page": "/",
+      "matchers": [
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/customer/:path*{(\\\\.json)}?",
+          "originalSource": "/customer/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/installer/:path*{(\\\\.json)}?",
+          "originalSource": "/installer/:path*"
+        },
+        {
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/officer/:path*{(\\\\.json)}?",
+          "originalSource": "/officer/:path*"
+        }
+      ],
+      "wasm": [],
+      "assets": [],
+      "env": {
+        "__NEXT_BUILD_ID": "development",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "1TygL7Bu1CENAbWrdAHW46t0rtG+rELYztLmuet+9z0=",
+        "__NEXT_PREVIEW_MODE_ID": "405e3e4761003e00ae389af2c5d94a7c",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "395bd2b9c86c946729cbb742b0277fcba8c45145b3ec5d2e425e42bf7597f157",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "92000840825354e82c22f77d404b1f5cbfeb8591afe656a0531b139722857885"
+      }
+    }
+  },
+  "instrumentation": null,
+  "functions": {}
+}

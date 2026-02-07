@@ -1,0 +1,115 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 830 >>
+stream
+0.93 0.97 0.99 rg
+0 720 612 72 re f
+0 0 0 rg
+BT
+/F1 18 Tf
+72 760 Td
+(SolarConnect Invoice) Tj
+/F1 10 Tf
+0 -18 Td
+(Invoice cml69n5pc000d3oqajn37xfij) Tj
+ET
+BT
+/F1 12 Tf
+72 680 Td
+(Invoice Details) Tj
+ET
+BT
+/F1 10 Tf
+72 664 Td
+(Application) Tj
+ET
+BT
+/F1 10 Tf
+360 664 Td
+(APP-946F9CBF) Tj
+ET
+BT
+/F1 10 Tf
+72 650 Td
+(Type) Tj
+ET
+BT
+/F1 10 Tf
+360 650 Td
+(monthly bill) Tj
+ET
+BT
+/F1 10 Tf
+72 636 Td
+(Description) Tj
+ET
+BT
+/F1 10 Tf
+360 636 Td
+(11 2025 Net Metering Bill) Tj
+ET
+BT
+/F1 10 Tf
+72 622 Td
+(Amount) Tj
+ET
+BT
+/F1 10 Tf
+360 622 Td
+(LKR 3,955) Tj
+ET
+BT
+/F1 10 Tf
+72 608 Td
+(Status) Tj
+ET
+BT
+/F1 10 Tf
+360 608 Td
+(pending) Tj
+ET
+BT
+/F1 10 Tf
+72 594 Td
+(Due Date) Tj
+ET
+BT
+/F1 10 Tf
+360 594 Td
+(2/17/2026) Tj
+ET
+0.85 0.85 0.85 RG
+72 570 m 540 570 l S
+0 0 0 rg
+BT
+/F1 9 Tf
+72 556 Td
+(SolarConnect - Generated electronically.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000001122 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1192
+%%EOF

@@ -1,0 +1,328 @@
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { DashboardLayout } from "@/components/dashboard-layout"
+import { useLanguage } from "@/context/LanguageContext"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Zap, Search, CheckCircle, Clock, TrendingUp, TrendingDown, FileText, Download } from "lucide-react"
+import { getDemoMonthlyBills, getDemoInvoices } from "@/lib/data"
+
+const meterReadings = [
+  {
+    id: "MR-001",
+    customerId: "CUST-001",
+    customerName: "John Smith",
+    address: "123 Solar Lane, Colombo 07",
+    accountNumber: "0712345678",
+    lastReading: 4520,
+    currentReading: 4890,
+    unitsConsumed: 370,
+    unitsGenerated: 420,
+    netUnits: -50,
+    readingDate: "2024-01-15",
+    status: "pending",
+  },
+  {
+    id: "MR-002",
+    customerId: "CUST-002",
+    customerName: "Sarah Wilson",
+    address: "456 Green Street, Colombo 03",
+    accountNumber: "0723456789",
+    lastReading: 3200,
+    currentReading: 3580,
+    unitsConsumed: 380,
+    unitsGenerated: 350,
+    netUnits: 30,
+    readingDate: "2024-01-15",
+    status: "pending",
+  },
+  {
+    id: "MR-003",
+    customerId: "CUST-003",
+    customerName: "Mike Johnson",
+    address: "789 Beach Road, Galle",
+    accountNumber: "0734567890",
+    lastReading: 2100,
+    currentReading: 2450,
+    unitsConsumed: 350,
+    unitsGenerated: 480,
+    netUnits: -130,
+    readingDate: "2024-01-14",
+    status: "verified",
+  },
+]
+
+export default function OfficerMeterReadings() {
+  const { t } = useLanguage()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedReading, setSelectedReading] = useState<(typeof meterReadings)[0] | null>(null)
+  const [showVerifyDialog, setShowVerifyDialog] = useState(false)
+  const [verificationNotes, setVerificationNotes] = useState("")
+  const monthlyBills = getDemoMonthlyBills()
+  const invoices = getDemoInvoices()
+  const billPreview = selectedReading ? monthlyBills.find((bill) => bill.meterReadingId === selectedReading.id) : null
+  const billInvoice = billPreview ? invoices.find((invoice) => invoice.id === billPreview.invoiceId) : null
+
+  const filteredReadings = meterReadings.filter(
+    (r) =>
+      r.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      r.accountNumber.includes(searchTerm) ||
+      r.id.toLowerCase().includes(searchTerm.toLowerCase()),
+  )
+
+  const pendingCount = meterReadings.filter((r) => r.status === "pending").length
+  const verifiedCount = meterReadings.filter((r) => r.status === "verified").length
+
+  const handleVerify = () => {
+    alert(`${selectedReading?.id} ${t("officerMeterReadingsSuccess")}`)
+    setShowVerifyDialog(false)
+    setSelectedReading(null)
+    setVerificationNotes("")
+  }
+
+  return (
+    <DashboardLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">{t("officerMeterReadingsTitle")}</h1>
+          <p className="text-muted-foreground">{t("officerMeterReadingsSubtitle")}</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("officerMeterReadingsTotalReadings")}</p>
+                  <p className="text-2xl font-bold text-foreground">{meterReadings.length}</p>
+                </div>
+                <Zap className="w-8 h-8 text-amber-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("officerMeterReadingsPending")}</p>
+                  <p className="text-2xl font-bold text-foreground">{pendingCount}</p>
+                </div>
+                <Clock className="w-8 h-8 text-cyan-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("officerMeterReadingsVerified")}</p>
+                  <p className="text-2xl font-bold text-foreground">{verifiedCount}</p>
+                </div>
+                <CheckCircle className="w-8 h-8 text-emerald-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t("officerMeterReadingsNetExport")}</p>
+                  <p className="text-2xl font-bold text-emerald-500">
+                    {meterReadings.reduce((sum, r) => sum + Math.max(0, -r.netUnits), 0)} {t("officerMeterReadingsKWH")}
+                  </p>
+                </div>
+                <TrendingUp className="w-8 h-8 text-emerald-500/50" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <CardTitle className="text-foreground">{t("officerMeterReadingsTitle")}</CardTitle>
+                <CardDescription>{t("officerMeterReadingsSubtitle")}</CardDescription>
+              </div>
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder={t("officerMeterReadingsSearch")}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 bg-background"
+                />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsCustomer")}</th>
+                    <th className="text-left py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsAccount")}</th>
+                    <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsConsumed")}</th>
+                    <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsGenerated")}</th>
+                    <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsNet")}</th>
+                    <th className="text-center py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsStatus")}</th>
+                    <th className="text-right py-3 px-4 text-sm font-medium text-muted-foreground">{t("officerMeterReadingsAction")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredReadings.map((reading) => (
+                    <tr key={reading.id} className="border-b border-border hover:bg-muted/50">
+                      <td className="py-3 px-4">
+                        <p className="font-medium text-foreground">{reading.customerName}</p>
+                        <p className="text-xs text-muted-foreground">{reading.address}</p>
+                      </td>
+                      <td className="py-3 px-4 text-foreground">{reading.accountNumber}</td>
+                      <td className="py-3 px-4 text-right text-foreground">{reading.unitsConsumed} {t("officerMeterReadingsKWH")}</td>
+                      <td className="py-3 px-4 text-right text-emerald-500">{reading.unitsGenerated} {t("officerMeterReadingsKWH")}</td>
+                      <td className="py-3 px-4 text-right">
+                        <span
+                          className={`inline-flex items-center gap-1 ${reading.netUnits < 0 ? "text-emerald-500" : "text-amber-500"}`}
+                        >
+                          {reading.netUnits < 0 ? (
+                            <TrendingUp className="w-3 h-3" />
+                          ) : (
+                            <TrendingDown className="w-3 h-3" />
+                          )}
+                          {Math.abs(reading.netUnits)} {t("officerMeterReadingsKWH")}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <Badge
+                          className={
+                            reading.status === "verified"
+                              ? "bg-emerald-500/10 text-emerald-600"
+                              : "bg-amber-500/10 text-amber-600"
+                          }
+                          variant="secondary"
+                        >
+                          {reading.status === "verified" ? t("officerMeterReadingsVerifiedBadge") : t("officerMeterReadingsPendingBadge")}
+                        </Badge>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {reading.status === "pending" && (
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setSelectedReading(reading)
+                              setShowVerifyDialog(true)
+                            }}
+                            className="bg-emerald-600 hover:bg-emerald-700"
+                          >
+                            {t("officerMeterReadingsVerify")}
+                          </Button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+
+        {showVerifyDialog && selectedReading && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <Card className="w-full max-w-md">
+              <CardHeader>
+                <CardTitle className="text-foreground">{t("officerMeterReadingsVerifyDialogTitle")}</CardTitle>
+                <CardDescription>{t("officerMeterReadingsVerifyDialogDescription")} {selectedReading.customerName}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-lg">
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("officerMeterReadingsPreviousReading")}</p>
+                    <p className="text-lg font-bold text-foreground">{selectedReading.lastReading}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("officerMeterReadingsCurrentReading")}</p>
+                    <p className="text-lg font-bold text-foreground">{selectedReading.currentReading}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("officerMeterReadingsUnitsConsumed")}</p>
+                    <p className="text-lg font-bold text-amber-500">{selectedReading.unitsConsumed} {t("officerMeterReadingsKWH")}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t("officerMeterReadingsUnitsGenerated")}</p>
+                    <p className="text-lg font-bold text-emerald-500">{selectedReading.unitsGenerated} {t("officerMeterReadingsKWH")}</p>
+                  </div>
+                </div>
+                {billPreview && (() => {
+                  const billAmount = billPreview.amount ?? billPreview.netAmount
+                  return (
+                  <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-emerald-700">{t("officerMeterReadingsBillingOutcome")}</p>
+                      <Badge className="bg-emerald-600 text-white" variant="secondary">
+                        {billPreview.status === "paid" ? t("officerMeterReadingsCreditIssued") : t("officerMeterReadingsInvoiceQueued")}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">{t("officerMeterReadingsMonthlyBill")}</span>
+                      <span className="font-semibold text-foreground">{billPreview.id}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">{t("officerMeterReadingsAmount")}</span>
+                      <span className={billAmount < 0 ? "text-emerald-600 font-semibold" : "text-foreground font-semibold"}>
+                        {billAmount < 0 ? "+" : ""}LKR {Math.abs(billAmount).toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm">
+                      {billPreview.invoiceId && (
+                        <Link href={`/customer/invoices/${billPreview.invoiceId}`} className="text-emerald-700 hover:underline">
+                          {t("officerMeterReadingsViewInvoice")} {billPreview.invoiceId}
+                        </Link>
+                      )}
+                      {billInvoice?.pdfUrl && (
+                        <a href={billInvoice.pdfUrl} download className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+                          <Download className="w-4 h-4" />
+                          {t("officerMeterReadingsDownloadPDF")}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  )
+                })()}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    {t("officerMeterReadingsVerificationNotes")}
+                  </label>
+                  <textarea
+                    value={verificationNotes}
+                    onChange={(e) => setVerificationNotes(e.target.value)}
+                    className="w-full h-20 p-3 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    placeholder={t("officerMeterReadingsNotesPlaceholder")}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowVerifyDialog(false)
+                      setSelectedReading(null)
+                    }}
+                    className="flex-1 bg-transparent"
+                  >
+                    {t("officerMeterReadingsCancel")}
+                  </Button>
+                  <Button onClick={handleVerify} className="flex-1 bg-emerald-600 hover:bg-emerald-700">
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    {t("officerMeterReadingsVerifyReading")}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+    </DashboardLayout>
+  )
+}

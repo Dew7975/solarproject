@@ -1,0 +1,20 @@
+{
+  "node": {
+    "60c5820d3780857758fceefd5634f1a24b35dbc966": {
+      "workers": {
+        "app/register/page": {
+          "moduleId": "[project]/404SquadSolarConnect/final/.next-internal/server/app/register/page/actions.js { ACTIONS_MODULE0 => \"[project]/404SquadSolarConnect/final/app/actions/auth.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "registerAction",
+          "filename": "404SquadSolarConnect/final/app/actions/auth.ts"
+        }
+      },
+      "layer": {
+        "app/register/page": "action-browser"
+      },
+      "exportedName": "registerAction",
+      "filename": "404SquadSolarConnect/final/app/actions/auth.ts"
+    }
+  },
+  "edge": {}
+}
